@@ -1,0 +1,166 @@
+## a very small version reflecting the progress made on the Restriction sites recognition script
+#try1 - to define the key and value and print them
+
+#START OF CODE FOR TRY1
+
+import itertools
+import sys
+import re
+
+def isheader(line):
+    return line[0] == '>'
+
+
+def aspairs(f):
+    seq_id = ''
+    sequence = ''
+    for header,group in itertools.groupby(f, isheader):
+        if header:
+            line = next(group)
+            seq_id = line[1:].split()[0]
+        else:
+            sequence = ''.join(line.strip() for line in group)
+            yield seq_id, sequence
+            
+filename = "resenz.txt"
+with open(filename,"r") as f:
+       seqs = dict(aspairs(f))
+
+for key,value in seqs.items():
+    #filename[value]=(pattern,property) #trying to make a tuple of two values but I cannot
+    print(key,value,"\n")
+    
+#END OF CODE FOR TRY1
+
+#OUTPUT:
+## EcoRI	GAATTC	StickyBsu15I	ATCGAT	BluntBsu36I	CCT[ACGT]AGG	BluntBsuRI	GGCC	StickyEcoRII	CC[AT]GG	Sticky 
+
+
+#try2 - to make the code read through the file and filter out the patterns
+
+#START OF CODE FOR TRY2
+
+#!/usr/bin/env python3
+
+# import the regular expression library
+import re
+import random
+random.seed(11012) # initialize the starting seed - we will all have basically same result this way
+
+# a random DNA sequence generator
+def rand_DNA (length):
+    rand_DNA=""
+    bases = ['A', 'C', 'G', 'T' ]
+    base_ct = len(bases)
+    for n in range(length):
+        rand_DNA += bases[random.randint(0,base_ct-1)]
+
+    return rand_DNA
+
+
+# lets initialize a pattern we want to match
+# let's use the PRE motif which is a binding site for
+# a transcription factor
+# based on this paper:
+#
+
+EcoRI   = "GAATTC"
+Bsu15I  = "ATCGAT"
+Bsu36I  = "CCT[ACGT]AGG"
+BsuRI   = "GGCC"
+EcoRII  = "CC[AT]GG"
+
+RestrictionEnzymes = [EcoRI, Bsu15I, Bsu36I, BsuRI, EcoRII]
+
+# Now let's search for this element in DNA sequence
+
+DNA = rand_DNA(100000)
+#print DNA
+for RE in RestrictionEnzymes:
+    pattern = re.compile(RE)
+    match = pattern.search(DNA)
+    count = pattern.findall(DNA)
+    print(RE,"matches", len(count), "sites")
+#    while match:
+#        print match.group(0), match.start(), match.end()
+#        match = pattern.search(DNA,match.end()+1)
+
+   # print( "//")
+   
+#END OF CODE FOR TRY2
+
+#OUTPUT:
+##GAATTC matches 16 sites
+#ATCGAT matches 20 sites
+#CCT[ACGT]AGG matches 28 sites
+#GGCC matches 381 sites
+#CC[AT]GG matches 182 sites
+
+#TRY3
+
+#START OF CODE FOR TRY3: a way to read the file line by line
+
+myvars = {}
+with open("resenz.txt") as myfile:
+    for line in myfile:
+        RE, seq = line.partition("\t")[::2]
+        print ("The restriction enzyme ",RE,"cuts the given sequence n times at ",seq)
+        #myvars[name.strip()] = float(var)
+        
+#END OF CODE FOR TRY3
+
+#OUTPUT
+##The restriction enzyme  EcoRI cuts the given sequence n times at  GAATTC	Sticky
+
+#The restriction enzyme  Bsu15I cuts the given sequence n times at  ATCGAT	Blunt
+
+#The restriction enzyme  Bsu36I cuts the given sequence n times at  CCT[ACGT]AGG	Blunt
+
+#The restriction enzyme  BsuRI cuts the given sequence n times at  GGCC	Sticky
+
+#The restriction enzyme  EcoRII cuts the given sequence n times at  CC[AT]GG	Sticky
+
+###
+###DESIRED OUTPUT: print("The restriction enzyme ",RE,"can cut through the given sequence at ",len(count),"sites, and generate ",property,"ends.")
+#The restriction enzyme EcoRI can cut through the given sequence at 16 sites, and generate Sticky ends.
+#(same for all other entries in the input file)
+
+
+
+
+#First WORKING CODE
+
+#!/usr/bin/env python3
+#Python code to demonstrate pattern matching - trying to open resenz txt file and write a code that takes only column 1
+#of that file and consider it as an item in the list RestrictionEnzymes
+
+# import the regular expression library
+import re
+import random
+random.seed(11012) # initialize the starting seed - we will all have basically same result this way
+
+# a random DNA sequence generator
+def rand_DNA (length):
+    rand_DNA=""
+    bases = ['A', 'C', 'G', 'T' ]
+    base_ct = len(bases)
+    for n in range(length):
+        rand_DNA += bases[random.randint(0,base_ct-1)]
+
+    return rand_DNA
+
+DNA = rand_DNA(100000)
+#print DNA
+filename = "resenz.txt"
+#seqs = {}
+with open(filename,"r") as f:
+    for line in f.readlines():
+        words = line.split()
+        #seqs[words[0]] = (words[1], words[2])
+        pattern = re.compile(words[1])
+        match = pattern.search(DNA)
+        count = pattern.findall(DNA)
+        print(words[0],"matches", len(count), "sites")
+
+#END WORKING CODE
+
