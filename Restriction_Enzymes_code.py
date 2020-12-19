@@ -1,6 +1,6 @@
 import itertools, sys, re, os
-file = "/rhome/yoza001/Project_practice/pRS426_seq.fasta"
-inputfile="pRS426_seq.fasta"
+file = "/rhome/yoza001/Project_practice/pRS426_seq.fasta" #change the path here if using another file
+inputfile="pRS426_seq.fasta" #use same filename as used above in 'file'
 if not os.path.exists(inputfile):
     os.system("curl -O {}".format(file))
 
@@ -24,7 +24,7 @@ with open(file,"rt") as fh:
     for seqinfo in seqs:
         seqstr = seqinfo[1].lower()
 
-reffile = "resenz.txt"
+reffile = "resenz.txt" #change the restriction enzyme database file here
 with open(reffile,"r") as f:
      for line in f.readlines():
         words = line.split()
@@ -32,6 +32,6 @@ with open(reffile,"r") as f:
         pattern = re.compile(words[1])
         match = pattern.search(seqstr)
         count = pattern.findall(seqstr)
-        print(words[0],"matches", len(count), "sites and produces ",words[2],"ends.")
+        print(words[0],"matches", len(count), "sites and produces ",words[2],"ends.") #0, 1, 2 refer to column 1, 2, 3 from left in database file
         
 
