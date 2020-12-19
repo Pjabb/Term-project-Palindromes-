@@ -32,7 +32,6 @@ with open(reffile,"r") as f:
         pattern = re.compile(words[1])
         match = pattern.search(seqstr)
         count = pattern.findall(seqstr)
-        print("The restriction enzyme ",words[0],"matches", len(count), "sites in the given sequence and produces ",words[2],"ends.)
-        #newseq=re.sub(PREsite,REPLACE,seqstr,flags=re.IGNORECASE)
-        #print(seqstr)
+        print("The restriction enzyme ",words[0],"matches", len(count), "sites in the given sequence and produces ",words[2],"ends.")
+        
 
