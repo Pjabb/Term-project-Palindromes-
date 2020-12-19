@@ -1,6 +1,7 @@
 # Term-project-Palindromes-
 
 #Parnian Jabbari, Yagna Oza
+
 #Part 1: Restriction sites recognition and frequency calculation - 
 #idea conception and major coding contribution - Yagna Oza
 
