@@ -1,0 +1,44 @@
+import itertools, sys, re, os
+file = "/rhome/pjabb001/Saccharo_ch1.fasta"
+inputfile="Saccharo_ch1.fasta"
+if not os.path.exists(inputfile):
+    os.system("curl -O {}".format(file))
+
+# define what a header looks like in FASTA format
+def isheader(line):
+    return line[0] == '>'
+
+def aspairs(f):
+    seq_id = ''
+    sequence = ''
+    for header,group in itertools.groupby(f, isheader):
+        if header:
+            line = next(group)
+            seq_id = line[1:].split()[0]
+        else:
+            sequence = ''.join(line.strip() for line in group)
+            yield seq_id, sequence
+
+with open(file,"rt") as fh:
+    seqs = aspairs(fh)
+    for seqinfo in seqs:
+        Mysequence = seqinfo[1].upper()
+print(len(Mysequence))
+pairs = {"A":"T", "T":"A", "G":"C", "C":"G"}
+ans = []
+for i in range(len(Mysequence) - 21 + 1):
+    pal = True
+    for j in range(9):
+        if pairs[ Mysequence[i+j] ] != Mysequence[i+17-j]:
+            pal = False
+            break
+    if not pal:
+        continue
+
+    if (Mysequence[i+19] == Mysequence[i+20]) and (Mysequence[i+19] in ('C', 'G')):
+        print(Mysequence[i : i+21])
+        ans.append(Mysequence[i : i+21])
+    else:
+        print(Mysequence[i : i+18] + " (X)")
+print("Count of answer: %d" % len(ans))
+
