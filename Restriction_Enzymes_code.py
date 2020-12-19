@@ -24,7 +24,7 @@ with open(file,"rt") as fh:
     for seqinfo in seqs:
         seqstr = seqinfo[1].lower()
 
-reffile = "resenzsmall.txt"
+reffile = "resenz.txt"
 with open(reffile,"r") as f:
      for line in f.readlines():
         words = line.split()
@@ -32,6 +32,6 @@ with open(reffile,"r") as f:
         pattern = re.compile(words[1])
         match = pattern.search(seqstr)
         count = pattern.findall(seqstr)
-        print("The restriction enzyme ",words[0],"matches", len(count), "sites in the given sequence and produces ",words[2],"ends.")
+        print(words[0],"matches", len(count), "sites and produces ",words[2],"ends.")
         
 
