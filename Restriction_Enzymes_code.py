@@ -1,6 +1,6 @@
 import itertools, sys, re, os
-file = "/rhome/yoza001/Project_practice/Scchr1.fasta"
-inputfile="Scchr1.fasta"
+file = "/rhome/yoza001/Project_practice/pRS426_seq.fasta"
+inputfile="pRS426_seq.fasta"
 if not os.path.exists(inputfile):
     os.system("curl -O {}".format(file))
 
@@ -32,7 +32,7 @@ with open(reffile,"r") as f:
         pattern = re.compile(words[1])
         match = pattern.search(seqstr)
         count = pattern.findall(seqstr)
-        print(words[0],"matches", len(count), "sites")
+        print("The restriction enzyme ",words[0],"matches", len(count), "sites in the given sequence and produces ",words[2],"ends.)
         #newseq=re.sub(PREsite,REPLACE,seqstr,flags=re.IGNORECASE)
         #print(seqstr)
 
